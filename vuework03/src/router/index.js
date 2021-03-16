@@ -1,7 +1,3 @@
-/** @format */
-
-// /** @format */
-
 // import { createRouter, createWebHistory } from 'vue-router';
 // import AllTask from '../views/AllTask.vue';
 // import WorkingTask from '../views/WorkingTask.vue';
@@ -9,7 +5,7 @@
 
 // const routes = [
 // 	{
-// 		path: '/',
+//    path: '/',
 // 		name: 'AllTask',
 // 		component: AllTask,
 // 	},

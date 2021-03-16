@@ -1,4 +1,3 @@
-<!-- @format -->
 
 <template>
 	<div id="app"></div>
