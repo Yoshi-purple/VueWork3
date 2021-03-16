@@ -1,6 +1,6 @@
 /** @format */
 
-import {createStore} from 'vuex';
+import { createStore } from 'vuex';
 
 export default createStore({
 	state: {
@@ -16,7 +16,7 @@ export default createStore({
 		},
 	},
 	mutations: {
-		createTask(state, {comment}) {
+		createTask(state, { comment }) {
 			const task = {
 				id: state.sequence,
 				comment: comment,
@@ -44,13 +44,13 @@ export default createStore({
 		},
 	},
 	actions: {
-		addTask({commit}, task) {
+		addTask({ commit }, task) {
 			commit('createTask', task);
 		},
-		changeDone({commit}, id) {
+		changeDone({ commit }, id) {
 			commit('changeDone', id);
 		},
-		deleteTask({commit}, id) {
+		deleteTask({ commit }, id) {
 			commit('deleteTask', id);
 		},
 	},
