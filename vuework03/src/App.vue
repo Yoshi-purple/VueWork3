@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <template>
-	<div id="app">
+  <div id="app">
 		<h1>ToDoリスト</h1>
 		<div class="radioDiv">
 			<input type="radio" id="all" value="0" name="disp" checked />
@@ -74,7 +74,7 @@
 	#statusSpan {
 		margin-right: 10px;
 	}
-	.btns {
+	.btns{
 		margin: 0px 1px;
 	}
 </style>
