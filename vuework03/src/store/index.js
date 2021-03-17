@@ -12,12 +12,18 @@ export default createStore ({
     sequence: state => {
       return state.sequence;
     },
+    doneTasks: state => {
+      return state.tasks.filter (task => task.done);
+    },
+    notDoneTasks: state => {
+      return state.tasks.filter (task => !task.done);
+    },
   },
   mutations: {
     createTask (state, {comment}) {
       const task = {
         id: state.sequence,
-        comment: comment,
+        comment,
         done: false,
       };
       state.tasks.push (task);
@@ -30,7 +36,6 @@ export default createStore ({
         state.sequence--;
       }
       for (let i = 0; i <= state.tasks.length; i++) {
-        // state.tasks[i].id = i;
         state.tasks[i].id = i;
       }
     },

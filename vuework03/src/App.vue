@@ -43,12 +43,14 @@ export default {
     ...mapActions(["addTask", "deleteTask"]),
     //タスクを追加する関数
     addTask() {
-      if (this.newTask === "") return;
-
-      this.$store.commit("createTask", {
-        comment: this.newTask,
-      });
-      this.newTask = "";
+      if (this.newTask === "") {
+        return;
+      } else {
+        this.$store.commit("createTask", {
+          comment: this.newTask,
+        });
+        this.newTask = "";
+      }
     },
   },
 };
