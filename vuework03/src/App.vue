@@ -2,80 +2,79 @@
   <div id="app">
     <h1>ToDoリスト</h1>
     <div class="radioDiv">
-      <input type="radio" id="all" value="全て" name="taskStatus" checked>
+      <input type="radio" id="all" value="0" name="disp" checked />
       <label for="all">全て</label>
-      <input type="radio" id="working" value="作業中" name="taskStatus">
+      <input type="radio" id="working" value="1" name="disp" />
       <label for="working">作業中</label>
-      <input type="radio" id="complete" value="完了" name="taskStatus">
+      <input type="radio" id="complete" value="2" name="disp" />
       <label for="complete">完了</label>
     </div>
-    <div taskTile>
+    <div class="taskTile">
       <ul class="toDoTitle">
-      <li v-for="task in taskTitle" :key="task.id">
-        <span id="idSpan">{{ task.id }}</span>
-        <span id="commentSpan">{{ task.taskComment }}</span>
-        <span id="statusSpan">{{ task.taskState }}</span>
-      </li>
-    </ul>
+        <li>
+          <span id="idSpan">ID</span>
+          <span id="commentSpan">コメント</span>
+          <span id="statusSpan">状態</span>
+        </li>
+      </ul>
     </div>
     <ul class="toDoUl">
       <li v-for="task in tasks" :key="task.id" id="toDoLi">
         <span id="idSpan">{{ task.id }}</span>
         <span id="commentSpan">{{ task.comment }}</span>
-        <button id="btns">{{ task.status }}</button>
-        <button id="btns">{{ task.delete }}</button>
+        <button class="btns">作業中</button>
+        <button class="btns" @click.stop="deleteTask(task.id)">削除</button>
       </li>
     </ul>
-   
+
     <h2>新規タスクの追加</h2>
-    <input type="text" v-model="newTask">
-    <button @click="addTask" id="btns">追加</button>
+    <input type="text" v-model="newTask" />
+    <button @click="addTask" class="btns">追加</button>
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   computed: {
-    taskTitle() {
-      return this.$store.state.taskTitle
-    },
-    tasks() {
-      return this.$store.state.tasks
-    }
+    ...mapGetters(["tasks"]),
   },
   methods: {
+    ...mapActions(["addTask", "deleteTask"]),
+    //タスクを追加する関数
     addTask() {
-      if(this.newTask === '') {
-        return 
-      }else{
-        this.$store.commit('addTask',{
+      if (this.newTask === "") {
+        return;
+      } else {
+        this.$store.commit("createTask", {
           comment: this.newTask,
-          });
-        this.newTask = '';
+        });
+        this.newTask = "";
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
-.toDoTitle{
+.toDoTitle {
   list-style: none;
   padding-left: 10px;
 }
-.toDoUl{
+.toDoUl {
   list-style: none;
   padding-left: 10px;
 }
-#idSpan{
+#idSpan {
   margin-right: 10px;
 }
-#commentSpan{
+#commentSpan {
   margin-right: 10px;
 }
-#statusSpan{
+#statusSpan {
   margin-right: 10px;
 }
-#btns{
-  margin:0px 1px;
+.btns {
+  margin: 0px 1px;
 }
 </style>
