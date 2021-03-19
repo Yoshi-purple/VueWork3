@@ -9,14 +9,11 @@ export default createStore ({
     tasks: state => {
       return state.tasks;
     },
+    done: state => {
+      return state.tasks.done;
+    },
     sequence: state => {
       return state.sequence;
-    },
-    doneTasks: state => {
-      return state.tasks.filter (task => task.done);
-    },
-    notDoneTasks: state => {
-      return state.tasks.filter (task => !task.done);
     },
   },
   mutations: {
@@ -39,19 +36,10 @@ export default createStore ({
         state.tasks[i].id = i;
       }
     },
-    changeDone (state, id) {
-      const index = state.tasks.findIndex (task => task.id === id);
-      if (index >= 0) {
-        state.tasks[index].done = !state.tasks[index].done;
-      }
-    },
   },
   actions: {
     addTask ({commit}, task) {
       commit ('createTask', task);
-    },
-    changeDone ({commit}, id) {
-      commit ('changeDone', id);
     },
     deleteTask ({commit}, id) {
       commit ('deleteTask', id);
