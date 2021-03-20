@@ -6,14 +6,20 @@ export default createStore ({
     sequence: 0,
   },
   getters: {
-    tasks: state => {
-      return state.tasks;
+    tasksCount (state) {
+      return state.tasks.length;
     },
-    done: state => {
-      return state.tasks.done;
+    doneTasks (state) {
+      return state.tasks.filter (task => task.done === '完了');
     },
-    sequence: state => {
-      return state.sequence;
+    notDoneTasks (state) {
+      return state.tasks.filter (task => task.done === '作業中');
+    },
+    NotDoneTasksCount (state, getters) {
+      return getters.notDoneTasks.length;
+    },
+    doneTasksCount (state, getters) {
+      return getters.doneTasks.length;
     },
   },
   mutations: {
@@ -21,7 +27,7 @@ export default createStore ({
       const task = {
         id: state.sequence,
         comment,
-        done: false,
+        done: '作業中',
       };
       state.tasks.push (task);
       state.sequence++;
@@ -35,14 +41,28 @@ export default createStore ({
       for (let i = 0; i <= state.tasks.length; i++) {
         state.tasks[i].id = i;
       }
+      console.log (index);
+    },
+    changeStatus (state, id) {
+      const index = state.tasks.findIndex (task => task.id === id);
+      if (index >= 0) {
+        if (state.tasks[index]['done'] === '完了') {
+          state.tasks[index]['done'] = '作業中';
+        } else {
+          state.tasks[index]['done'] = '完了';
+        }
+      }
     },
   },
   actions: {
-    addTask ({commit}, task) {
+    createTask ({commit}, task) {
       commit ('createTask', task);
     },
     deleteTask ({commit}, id) {
       commit ('deleteTask', id);
+    },
+    changeStatus ({commit}, id) {
+      commit ('changeStatus', id);
     },
   },
   modules: {},
