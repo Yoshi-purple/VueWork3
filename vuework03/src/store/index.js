@@ -15,7 +15,7 @@ export default createStore ({
     notDoneTasks (state) {
       return state.tasks.filter (task => task.done === '作業中');
     },
-    NotDoneTasksCount (state, getters) {
+    notDoneTasksCount (state, getters) {
       return getters.notDoneTasks.length;
     },
     doneTasksCount (state, getters) {
@@ -41,7 +41,6 @@ export default createStore ({
       for (let i = 0; i <= state.tasks.length; i++) {
         state.tasks[i].id = i;
       }
-      console.log (index);
     },
     changeStatus (state, id) {
       const index = state.tasks.findIndex (task => task.id === id);
@@ -51,6 +50,7 @@ export default createStore ({
         } else {
           state.tasks[index]['done'] = '完了';
         }
+        console.log (index);
       }
     },
   },

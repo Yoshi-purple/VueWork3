@@ -5,7 +5,7 @@
       <input type="radio" id="all" value="全て" name="disp" v-model="disp" checked />
       <label for="all">全て({{ tasksCount }})</label>
       <input type="radio" id="notDone" value="作業中" name="disp" v-model="disp" />
-      <label for="working">作業中({{ NotDoneTasksCount }})</label>
+      <label for="working">作業中({{ notDoneTasksCount }})</label>
       <input type="radio" id="done" value="完了" name="disp" v-model="disp" />
       <label for="complete">完了({{ doneTasksCount }})</label>
     </div>
@@ -63,7 +63,7 @@ export default {
       'tasksCount',
       'notDoneTasks',
       'doneTasks',
-      'NotDoneTasksCount',
+      'notDoneTasksCount',
       'doneTasksCount',
     ]),
   },
