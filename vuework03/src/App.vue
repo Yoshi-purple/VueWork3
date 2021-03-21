@@ -2,12 +2,12 @@
   <div id="app">
     <h1>ToDoリスト</h1>
     <div class="radioDiv">
-      <input type="radio" id="all" value="0" name="disp" v-model="disp" checked />
-      <label for="all">全て</label>
-      <input type="radio" id="working" value="1" name="disp" v-model="disp" />
-      <label for="working">作業中</label>
-      <input type="radio" id="complete" value="2" name="disp" v-model="disp" />
-      <label for="complete">完了</label>
+      <input type="radio" id="all" value="全て" name="disp" v-model="disp" checked />
+      <label for="all">全て({{ tasksCount }})</label>
+      <input type="radio" id="notDone" value="作業中" name="disp" v-model="disp" />
+      <label for="working">作業中({{ notDoneTasksCount }})</label>
+      <input type="radio" id="done" value="完了" name="disp" v-model="disp" />
+      <label for="complete">完了({{ doneTasksCount }})</label>
     </div>
     <div class="taskTile">
       <ul class="toDoTitle">
@@ -18,11 +18,27 @@
         </li>
       </ul>
     </div>
-    <ul class="toDoUl">
-      <li v-for="task in tasks" :key="task.id" id="toDoLi">
+    <ul class="tasksUl" v-if="disp === '全て'">
+      <li v-for="task in tasks" :key="task.id">
         <span id="idSpan">{{ task.id }}</span>
         <span id="commentSpan">{{ task.comment }}</span>
-        <button class="btns" @click="changeDone">作業中</button>
+        <button class="btns" @click="changeStatus(task.id)">{{ task.done }}</button>
+        <button class="btns" @click.stop="deleteTask(task.id)">削除</button>
+      </li>
+    </ul>
+    <ul class="tasksUl" v-if="disp === '作業中'">
+      <li v-for="task in notDoneTasks" :key="task.id">
+        <span id="idSpan">{{ task.id }}</span>
+        <span id="commentSpan">{{ task.comment }}</span>
+        <button class="btns" @click="changeStatus(task.id)">{{ task.done }}</button>
+        <button class="btns" @click.stop="deleteTask(task.id)">削除</button>
+      </li>
+    </ul>
+    <ul class="tasksUl" v-if="disp === '完了'">
+      <li v-for="task in doneTasks" :key="task.id">
+        <span id="idSpan">{{ task.id }}</span>
+        <span id="commentSpan">{{ task.comment }}</span>
+        <button class="btns" @click="changeStatus(task.id)">{{ task.done }}</button>
         <button class="btns" @click.stop="deleteTask(task.id)">削除</button>
       </li>
     </ul>
@@ -33,44 +49,39 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   data() {
     return {
-      disp: 0,
+      disp: '全て',
     };
   },
   computed: {
-    ...mapGetters(["tasks", "done", "doneTasks", "notDoneTasks"]),
+    ...mapState(['tasks']),
+    ...mapGetters([
+      'tasksCount',
+      'notDoneTasks',
+      'doneTasks',
+      'notDoneTasksCount',
+      'doneTasksCount',
+    ]),
   },
   methods: {
-    ...mapActions(["addTask", "deleteTask", "changeDone"]),
+    ...mapActions(['deleteTask', 'changeStatus']),
     //タスクを追加する関数
     addTask() {
-      if (this.newTask === "") {
+      if (this.newTask === '') {
         return;
       } else {
-        this.$store.commit("createTask", {
+        this.$store.commit('createTask', {
           comment: this.newTask,
         });
-        this.newTask = "";
+        this.newTask = '';
       }
     },
     changeStatus(e) {
-      if (e.target.innerText === "完了") {
-        e.target.innerText = "作業中";
-      } else {
-        e.target.innerText = "完了";
-      }
-    },
-    changeDone(e) {
-      if (e.target.innerText === "完了") {
-        e.target.innerText = "作業中";
-      } else {
-        e.target.innerText = "完了";
-      }
-      console.log(this.tasks);
+      this.$store.commit('changeStatus', e);
     },
   },
 };
@@ -81,7 +92,7 @@ export default {
   list-style: none;
   padding-left: 10px;
 }
-.toDoUl {
+.tasksUl {
   list-style: none;
   padding-left: 10px;
 }
