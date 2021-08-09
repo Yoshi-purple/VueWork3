@@ -1,0 +1,13 @@
+version: '3'
+services:
+  vue-docker:
+    build:
+      context: .
+      dockerfile: vuework03/Dockerfile
+    ports:
+      - '4000:8080'
+    working_dir: /app
+    volumes:
+      - ./vuework03:/app
+    stdin_open: true
+    tty: true
