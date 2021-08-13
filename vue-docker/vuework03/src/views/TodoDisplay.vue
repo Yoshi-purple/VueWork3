@@ -26,6 +26,7 @@ export default {
   methods: {
     changeWorkState(index) {
       this.$emit('change', this.todoList[index])
+      console.log(this.todoList[index])
     },
     deleteTodo(index) {
       this.$emit("delete", this.todoList[index]);

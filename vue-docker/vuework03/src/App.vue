@@ -4,7 +4,7 @@
   <TodoFilter @showAll="showAll" @showWorking="showWorking" @showComplete="showComplete"></TodoFilter>
   <TodoDisplay :todoList="todoList" @change="changeStatus" @delete="deleteTask" @changeId="changeId" v-show="state === 'all'"></TodoDisplay>
   <TodoDisplay :todoList="notDoneTasks" @change="changeStatus" @delete="deleteTask" @changeId="changeId"  v-show="state === 'working'"></TodoDisplay>
-  <TodoDisplay :todoList="doneTasks" @change="changeStatus" @delete="deleteTask" v-show="state === 'complete'"></TodoDisplay>
+  <TodoDisplay :todoList="doneTasks" @change="changeStatus" @delete="deleteTask" @changeId="changeId" v-show="state === 'complete'"></TodoDisplay>
   <h2>新規タスクの追加</h2>
   <TodoInput :todoList="todoList" @add="addTodo"></TodoInput>
 </div>
@@ -60,21 +60,18 @@ export default {
       },
     changeId() {
       for(let i = 0;i <= this.todoList.length; i++){
-        // let newId = Reflect.get(this.todoList,i)
-        // newId["id"] = i;
-        // console.log(newId)
         this.todoList[i]["id"] = i;
         console.log(this.todoList)
     }
     },
-    showWorking() {
-      this.state = "working"
+    showWorking(selectedState) {
+      this.state = selectedState
     },
-    showComplete() {
-      this.state = "complete"
+    showComplete(selectedState) {
+      this.state = selectedState
     },
-    showAll() {
-      this.state = "all"
+    showAll(selectedState) {
+      this.state = selectedState
     }
   },
 }
