@@ -1,7 +1,7 @@
 <template>
 <div>
   <h1>ToDoリスト</h1>
-  <TodoFilter @showAll="showAll" @showWorking="showWorking" @showComplete="showComplete"></TodoFilter>
+  <TodoFilter @showSwitch="showSwitch"></TodoFilter>
   <TodoDisplay :todoList="todoList" @change="changeStatus" @delete="deleteTask" @changeId="changeId" v-show="state === 'all'"></TodoDisplay>
   <TodoDisplay :todoList="notDoneTasks" @change="changeStatus" @delete="deleteTask" @changeId="changeId"  v-show="state === 'working'"></TodoDisplay>
   <TodoDisplay :todoList="doneTasks" @change="changeStatus" @delete="deleteTask" @changeId="changeId" v-show="state === 'complete'"></TodoDisplay>
@@ -64,13 +64,7 @@ export default {
         console.log(this.todoList)
     }
     },
-    showWorking(selectedState) {
-      this.state = selectedState
-    },
-    showComplete(selectedState) {
-      this.state = selectedState
-    },
-    showAll(selectedState) {
+    showSwitch(selectedState) {
       this.state = selectedState
     }
   },
