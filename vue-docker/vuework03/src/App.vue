@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="app">
   <h1>ToDoリスト</h1>
   <TodoFilter @showSwitch="showSwitch"></TodoFilter>
   <TodoDisplay :todoList="todoList" @change="changeStatus" @delete="deleteTask" @changeId="changeId" v-show="state === 'all'"></TodoDisplay>

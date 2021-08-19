@@ -1,7 +1,7 @@
 <template>
   <div id="todo-input">
-    <input type="text" placeholder="タスクを入力"  style="height: 1.5em" v-model="newTodo">
-    <button id="add-button" style="margin-left: 3px" @click="addTask">追加</button>
+    <input type="text" placeholder="タスクを入力" style="height: 1.5em" v-model="newTodo" data-test="newTodo">
+    <button id="add-button" style="margin-left: 3px" @click="addTask" data-test="addTodo">追加</button>
   </div>
 </template>
 
@@ -13,11 +13,14 @@ export default {
     }
   },
 
-  props: ["todoList"],
   methods: {
     addTask() {
-      this.$emit("add", this.newTodo)
-      this.newTodo = ""
+      if(this.newTodo === ""){
+        console.log('タスクを入力してください')
+      }else {
+        this.$emit("add", this.newTodo)
+        this.newTodo = ""
+      }
     }
   },
 }

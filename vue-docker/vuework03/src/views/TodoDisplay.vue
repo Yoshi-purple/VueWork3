@@ -4,11 +4,11 @@
   <span style="margin-right: 1em">コメント</span>
   <span>状態</span>
   <ul>
-    <li v-for="todo in todoList" :key="todo.id">
+    <li v-for="todo in todoList" :key="todo.id" data-test="todo">
       <p class="todo-tag" style="margin-right: 1em">{{ todo.id }}</p>
-      <p class="todo-tag" style="margin-right: 1em">{{ todo.task }}</p>
-      <button class="btn" @click="changeWorkState(todo.id)">{{ todo.status }}</button>
-      <button class="btn" @click="deleteTodo(todo.id)">削除</button>
+      <p class="todo-tag" style="margin-right: 1em" data-test="task">{{ todo.task }}</p>
+      <button class="btn" @click="changeWorkState(todo.id)" data-test="change">{{ todo.status }}</button>
+      <button class="btn" @click="deleteTodo(todo.id)" data-test="delete">削除</button>
     </li>
   </ul>
 </div>
@@ -19,7 +19,6 @@ export default {
     todoList: Array,
     notDoneTasks: Array,
     doneTasks: Array,
-    state: String
   },
   computed: {
   },
