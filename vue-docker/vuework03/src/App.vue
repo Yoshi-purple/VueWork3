@@ -1,111 +1,75 @@
 <template>
-  <div id="app">
-    <h1>ToDoリスト</h1>
-    <div class="radioDiv">
-      <input type="radio" id="all" value="全て" name="disp" v-model="disp" checked />
-      <label for="all">全て({{ tasksCount }})</label>
-      <input type="radio" id="notDone" value="作業中" name="disp" v-model="disp" />
-      <label for="working">作業中({{ notDoneTasksCount }})</label>
-      <input type="radio" id="done" value="完了" name="disp" v-model="disp" />
-      <label for="complete">完了({{ doneTasksCount }})</label>
-    </div>
-    <div class="taskTile">
-      <ul class="toDoTitle">
-        <li>
-          <span id="idSpan">ID</span>
-          <span id="commentSpan">コメント</span>
-          <span id="statusSpan">状態</span>
-        </li>
-      </ul>
-    </div>
-    <ul class="tasksUl" v-if="disp === '全て'">
-      <li v-for="task in tasks" :key="task.id">
-        <span id="idSpan">{{ task.id }}</span>
-        <span id="commentSpan">{{ task.comment }}</span>
-        <button class="btns" @click="changeStatus(task.id)">{{ task.done }}</button>
-        <button class="btns" @click.stop="deleteTask(task.id)">削除</button>
-      </li>
-    </ul>
-    <ul class="tasksUl" v-if="disp === '作業中'">
-      <li v-for="task in notDoneTasks" :key="task.id">
-        <span id="idSpan">{{ task.id }}</span>
-        <span id="commentSpan">{{ task.comment }}</span>
-        <button class="btns" @click="changeStatus(task.id)">{{ task.done }}</button>
-        <button class="btns" @click.stop="deleteTask(task.id)">削除</button>
-      </li>
-    </ul>
-    <ul class="tasksUl" v-if="disp === '完了'">
-      <li v-for="task in doneTasks" :key="task.id">
-        <span id="idSpan">{{ task.id }}</span>
-        <span id="commentSpan">{{ task.comment }}</span>
-        <button class="btns" @click="changeStatus(task.id)">{{ task.done }}</button>
-        <button class="btns" @click.stop="deleteTask(task.id)">削除</button>
-      </li>
-    </ul>
-
-    <h2>新規タスクの追加</h2>
-    <input type="text" v-model="newTask" />
-    <button @click="addTask" class="btns">追加</button>
-  </div>
+<div id="app">
+  <h1>ToDoリスト</h1>
+  <TodoFilter @showSwitch="showSwitch"></TodoFilter>
+  <TodoDisplay :todoList="todoList" @change="changeStatus" @delete="deleteTask" @changeId="changeId" v-show="state === 'all'"></TodoDisplay>
+  <TodoDisplay :todoList="notDoneTasks" @change="changeStatus" @delete="deleteTask" @changeId="changeId"  v-show="state === 'working'"></TodoDisplay>
+  <TodoDisplay :todoList="doneTasks" @change="changeStatus" @delete="deleteTask" @changeId="changeId" v-show="state === 'complete'"></TodoDisplay>
+  <h2>新規タスクの追加</h2>
+  <TodoInput :todoList="todoList" @add="addTodo"></TodoInput>
+</div>
 </template>
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
-
+import TodoFilter from "./views/TodoFilter.vue"
+import TodoInput from "./views/TodoInput.vue"
+import TodoDisplay from "./views/TodoDisplay.vue"
 export default {
-  data() {
+  data(){
     return {
-      disp: '全て',
-    };
+      todoList: [],
+      sequence: 0,
+      state: "all"
+    }
+  },
+  components: {
+    TodoFilter,
+    TodoInput,
+    TodoDisplay
   },
   computed: {
-    ...mapState(['tasks']),
-    ...mapGetters([
-      'tasksCount',
-      'notDoneTasks',
-      'doneTasks',
-      'notDoneTasksCount',
-      'doneTasksCount',
-    ]),
+    doneTasks() {
+      return this.todoList.filter(todo => todo.status === "完了")
+    },
+    notDoneTasks() {
+      return this.todoList.filter(todo => todo.status === "作業中")
+    },
   },
   methods: {
-    ...mapActions(['deleteTask', 'changeStatus']),
-    //タスクを追加する関数
-    addTask() {
-      if (this.newTask === '') {
-        return;
+    addTodo(task) {
+      const newTask = {
+        id: this.sequence,
+        task: task,
+        status: "作業中"
+      }
+      this.todoList.push(newTask)
+      this.sequence++;
+    },
+    changeStatus(task) {
+      if(task.status === "作業中") {
+        task.status = "完了"
       } else {
-        this.$store.commit('createTask', {
-          comment: this.newTask,
-        });
-        this.newTask = '';
+        task.status = "作業中"
       }
     },
-    changeStatus(e) {
-      this.$store.commit('changeStatus', e);
+    deleteTask(task) {
+      let index = this.todoList.indexOf(task)
+      if(index >= 0){
+        this.todoList.splice(index, 1);
+      }
+        this.sequence--;
+      },
+    changeId() {
+      for(let i = 0;i <= this.todoList.length; i++){
+        this.todoList[i]["id"] = i;
+        console.log(this.todoList)
+    }
     },
+    showSwitch(selectedState) {
+      this.state = selectedState
+    }
   },
-};
+}
 </script>
 
 <style>
-.toDoTitle {
-  list-style: none;
-  padding-left: 10px;
-}
-.tasksUl {
-  list-style: none;
-  padding-left: 10px;
-}
-#idSpan {
-  margin-right: 10px;
-}
-#commentSpan {
-  margin-right: 10px;
-}
-#statusSpan {
-  margin-right: 10px;
-}
-.btns {
-  margin: 0px 1px;
-}
 </style>
